@@ -15,16 +15,16 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 
 ## Demo
 <p align="center">
-  <img src="samples/img1.jpg" width="22%">
-  <img src="samples/img2.jpg" width="22%">
-  <img src="samples/img3.jpg" width="22%">
-  <img src="samples/img4.jpg" width="22%">
+  <img src="demo/image1.png" width="22%">
+  <img src="demo/image2.png" width="22%">
+  <img src="demo/image3.png" width="22%">
+  <img src="demo/image4.png" width="22%">
 </p>
 <p align="center">
-  <img src="samples/img5.jpg" width="22%">
-  <img src="samples/img6.jpg" width="22%">
-  <img src="samples/img7.jpg" width="22%">
-  <img src="samples/img8.jpg" width="22%">
+  <img src="demo/image1-pred.png" width="22%">
+  <img src="demo/image2-pred.png" width="22%">
+  <img src="demo/image3-pred.png" width="22%">
+  <img src="demo/image4-pred.png" width="22%">
 </p>
 
 ---
