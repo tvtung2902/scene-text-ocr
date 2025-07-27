@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
-from backbone import ResNet34Backbone
-from sequence_head import BiLSTM
+from model.backbone import ResNet34Backbone
+from model.sequence_head import BiLSTM
 
 class OCRModel(nn.Module):
     def __init__(self, vocab_size, hidden_size, n_layers, dropout=0.3, pretrained_backbone=True):
