@@ -13,21 +13,6 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 
 ---
 
-## Model
-
-### 1. Text Detection - YOLOv11
-- Detects text regions from input images.
-- Returns bounding boxes around each detected text instance.
-
-### 2. Text Recognition - BiLSTM
-- Cropped text regions are passed through a CNN-BiLSTM network.
-- The CNN uses **ResNet34** to extract features.
-- Features are fed into **Bidirectional LSTM** for sequence modeling.
-- Uses **CTC loss** for sequence alignment during training.
-
-
----
-
 ## Demo
 <p align="center">
   <img src="samples/img1.jpg" width="22%">
@@ -41,4 +26,18 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
   <img src="samples/img7.jpg" width="22%">
   <img src="samples/img8.jpg" width="22%">
 </p>
+
+---
+
+## Model
+
+### 1. Text Detection - YOLOv11
+- Detects text regions from input images.
+- Returns bounding boxes around each detected text instance.
+
+### 2. Text Recognition - BiLSTM
+- Cropped text regions are passed through a CNN-BiLSTM network.
+- The CNN uses **ResNet34** to extract features.
+- Features are fed into **Bidirectional LSTM** for sequence modeling.
+- Uses **CTC loss** for sequence alignment during training.
 
