@@ -41,3 +41,9 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 - Features are fed into **Bidirectional LSTM** for sequence modeling.
 - Uses **CTC loss** for sequence alignment during training.
 
+---
+
+## Dataset
+
+**Text detection** : https://drive.google.com/drive/folders/1bAHvRxJETifSWpKD-zlUEK_yNCUBLfgB?usp=sharing
+**Text Recognition** : https://drive.google.com/drive/folders/1513rGLn1sgr26BbP6QyJ4uMK1zLhJQbw?usp=sharing
