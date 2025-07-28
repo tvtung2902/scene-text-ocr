@@ -50,12 +50,12 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 - Uses **CTC loss** for sequence alignment during training.
 
 <p align="center">
-  <img src="demo/train-rcnn.png" width="90%">
+  <img src="demo/train-rcnn.png" width="90%"><br>
   <em>Figure: Recognition training</em>
 </p>
 
 <p align="center">
-  <img src="demo/val-rcnn.png" width="90%">
+  <img src="demo/val-rcnn.png" width="90%"><br>
   <em>Figure: Recognition validation</em>
 </p>
 
