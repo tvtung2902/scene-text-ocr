@@ -30,9 +30,11 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 ### Video Demo
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=4QL-D-GKuqs" target="_blank">
-    <img src="https://img.youtube.com/vi/4QL-D-GKuqs/0.jpg" width="100%" alt="Watch the demo video on YouTube"/>
-  </a>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/4QL-D-GKuqs" 
+    title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
+    clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    allowfullscreen>
+  </iframe>
 </p>
 
 ---
