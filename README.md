@@ -36,8 +36,8 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 - Returns bounding boxes around each detected text instance.
 
 <p align="center">
-  <img src="demo/results-yolo.png" width="40%"><br>
-  <em>Figure: YOLOv11 detection training and validation</em>
+  <img src="demo/results-yolo.png" width="100%"><br>
+  <em>Figure: Detection training and validation</em>
 </p>
 
 ### 2. Text Recognition - BiLSTM
@@ -47,9 +47,13 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 - Uses **CTC loss** for sequence alignment during training.
 
 <p align="center">
-  <img src="demo/train-rcnn.png" width="40%">
-  <img src="demo/val-rcnn.png" width="40%"><br>
-  <em>Figure: Training and validation loss curves for the text recognition model (RCNN).</em>
+  <img src="demo/train-rcnn.png" width="100%">
+  <em>Figure: Recognition training</em>
+</p>
+
+<p align="center">
+  <img src="demo/val-rcnn.png" width="100%">
+  <em>Figure: Recognition validation</em>
 </p>
 
 ---
