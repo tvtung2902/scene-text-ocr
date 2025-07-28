@@ -29,12 +29,15 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 
 ### Video Demo
 
-<details>
-  <summary>video demo</summary>
+<video
+  src="demo/demo.MOV"
+  data-canonical-src="..."
+  controls="controls"
+  muted="muted"
+  class="d-block rounded-bottom-2 border-top width-fit"
+  style="max-height:640px; min-height: 200px">
+</video>
 
-  <video src="demo/demo.MOV" controls autoplay muted style="width:100%; max-width:720px; margin-top:10px;"></video>
-
-</details>
 
 ---
 
