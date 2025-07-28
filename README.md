@@ -15,7 +15,7 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 
 ## Demo
 
-- You can watch the video demo **[here](https://www.youtube.com/watch?v=Kgb8kxcqafA)**
+**You can watch the video demo [here](https://www.youtube.com/watch?v=4QL-D-GKuqs)**
 
 <p align="center">
   <img src="demo/image1.png" width="22%">
