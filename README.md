@@ -14,6 +14,9 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 ---
 
 ## Demo
+
+- You can watch the video demo **[here](https://www.youtube.com/watch?v=Kgb8kxcqafA)**
+
 <p align="center">
   <img src="demo/image1.png" width="22%">
   <img src="demo/image2.png" width="22%">
@@ -26,18 +29,6 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
   <img src="demo/image3-pred.png" width="22%">
   <img src="demo/image4-pred.png" width="22%">
 </p>
-
-### Video Demo
-
-<video
-  src="demo/demo.MOV"
-  data-canonical-src="..."
-  controls="controls"
-  muted="muted"
-  class="d-block rounded-bottom-2 border-top width-fit"
-  style="max-height:640px; min-height: 200px">
-</video>
-
 
 ---
 
