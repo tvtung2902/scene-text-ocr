@@ -1,4 +1,3 @@
-# backend.py (FastAPI server)
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -29,12 +28,13 @@ app.add_middleware(
 VOCAB_PATH = 'utils/vocab.yml'
 YOLO_CKPT = 'checkpoint/yolo.pt'
 OCR_CKPT = 'checkpoint/lstm.pt'
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+# DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE= 'cpu'
 
 vocab = Vocab(VOCAB_PATH)
 vocab_size = len(vocab.char_2_idx)
 yolo = YOLO(YOLO_CKPT)
-ocr_model = OCRModel(vocab_size=vocab_size).to(DEVICE)
+ocr_model = OCRModel(vocab_size=vocab_size, hidden_size=512, n_layers=2).to(DEVICE)
 checkpoint = torch.load(OCR_CKPT, map_location=DEVICE)
 ocr_model.load_state_dict(checkpoint['model_state_dict'] if 'model_state_dict' in checkpoint else checkpoint)
 ocr_model.eval()
@@ -63,9 +63,10 @@ async def ocr_api(file: UploadFile = File(...)):
     keep = confs >= 0.5
     preds = preds[keep]
     confs = confs[keep]
+    sorted_preds = sorted(zip(preds, confs), key=lambda item: (item[0][1], item[0][0]))
 
     ocr_results = []
-    for box, conf in zip(preds, confs):
+    for box, conf in sorted_preds:
         x1, y1, x2, y2 = map(int, box)
         crop = img_np[y1:y2, x1:x2]
         if crop.shape[0] < 5 or crop.shape[1] < 5:
@@ -87,4 +88,4 @@ async def ocr_api(file: UploadFile = File(...)):
     return JSONResponse(content={"results": ocr_results})
 
 if __name__ == "__main__":
-    uvicorn.run("backend:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=False)

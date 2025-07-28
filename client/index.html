@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scene Text OCR - AI Text Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            color: #2c3e50;
+        }
+
+        /* Header */
+        .header {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 
+                0 2px 12px rgba(0, 0, 0, 0.06),
+                0 1px 4px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-circle {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 4px 16px rgba(33, 150, 243, 0.2),
+                0 2px 8px rgba(33, 150, 243, 0.1);
+            color: white;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1976D2;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #64748b;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover {
+            color: #2196F3;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2196F3;
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 48px auto;
+            padding: 0 32px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.08),
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 4px 16px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+                0 32px 80px rgba(0, 0, 0, 0.12),
+                0 16px 48px rgba(0, 0, 0, 0.06),
+                0 8px 24px rgba(0, 0, 0, 0.04);
+        }
+
+        .card-header {
+            margin-bottom: 32px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 64px 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .upload-area:hover {
+            border-color: #2196F3;
+            background: #f0f9ff;
+            transform: translateY(-4px);
+            box-shadow: 
+                0 16px 40px rgba(33, 150, 243, 0.12),
+                0 8px 24px rgba(33, 150, 243, 0.08);
+        }
+
+        .upload-area.dragover {
+            border-color: #2196F3;
+            background: #e0f2fe;
+            transform: scale(1.02);
+            box-shadow: 
+                0 20px 48px rgba(33, 150, 243, 0.15),
+                0 12px 32px rgba(33, 150, 243, 0.1);
+        }
+
+        .upload-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 12px;
+        }
+
+        .upload-subtext {
+            font-size: 15px;
+            color: #64748b;
+            margin-bottom: 32px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            box-shadow: 
+                0 8px 24px rgba(33, 150, 243, 0.25),
+                0 4px 12px rgba(33, 150, 243, 0.15);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 32px rgba(33, 150, 243, 0.3),
+                0 6px 16px rgba(33, 150, 243, 0.2);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            font-size: 16px;
+            margin-top: 24px;
+            box-shadow: 
+                0 8px 24px rgba(16, 185, 129, 0.25),
+                0 4px 12px rgba(16, 185, 129, 0.15);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 32px rgba(16, 185, 129, 0.3),
+                0 6px 16px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn:disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            max-width: 100%;
+            /*max-height: 320px;*/
+            border-radius: 16px;
+            box-shadow: 
+                0 16px 40px rgba(0, 0, 0, 0.12),
+                0 8px 24px rgba(0, 0, 0, 0.08);
+            margin: 24px 0;
+            transition: all 0.3s ease;
+        }
+
+        .image-preview:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 24px 56px rgba(0, 0, 0, 0.15),
+                0 12px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* File Info */
+        .file-info {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 24px 0;
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.04),
+                0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .file-info h4 {
+            color: #1e293b;
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .file-info p {
+            color: #64748b;
+            font-size: 14px;
+            margin: 6px 0;
+        }
+
+        /* Results */
+        .results-placeholder {
+            text-align: center;
+            padding: 80px 32px;
+            color: #64748b;
+        }
+
+        .results-placeholder h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .results-placeholder p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 80px 32px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e2e8f0;
+            border-top: 4px solid #2196F3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 24px;
+            box-shadow: 0 4px 16px rgba(33, 150, 243, 0.15);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #334155;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .loading-subtext {
+            font-size: 15px;
+            color: #64748b;
+        }
+
+        /* Result Image */
+        .result-image {
+            max-width: 100%;
+            max-height: 480px;
+            border-radius: 16px;
+            box-shadow: 
+                0 20px 48px rgba(0, 0, 0, 0.12),
+                0 12px 32px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .result-image:hover {
+            transform: scale(1.02);
+            box-shadow: 
+                0 32px 72px rgba(0, 0, 0, 0.15),
+                0 16px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Detected Texts */
+        .detected-texts {
+            margin-top: 32px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.06),
+                0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .detected-texts h4 {
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .text-item {
+            background: white;
+            padding: 20px;
+            margin: 12px 0;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            box-shadow: 
+                0 4px 16px rgba(0, 0, 0, 0.04),
+                0 2px 8px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+        }
+
+        .text-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 24px rgba(0, 0, 0, 0.08),
+                0 4px 12px rgba(0, 0, 0, 0.04);
+        }
+
+        .text-confidence {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 8px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Messages */
+        .success-message {
+            background: #f0fdf4;
+            color: #166534;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 24px 0;
+            border: 1px solid #bbf7d0;
+            box-shadow: 
+                0 8px 24px rgba(34, 197, 94, 0.08),
+                0 4px 12px rgba(34, 197, 94, 0.04);
+        }
+
+        .error-message {
+            background: #fef2f2;
+            color: #991b1b;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 24px 0;
+            border: 1px solid #fecaca;
+            box-shadow: 
+                0 8px 24px rgba(239, 68, 68, 0.08),
+                0 4px 12px rgba(239, 68, 68, 0.04);
+        }
+
+        /* Connection Status */
+        .connection-status {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .connection-status.online {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .connection-status.offline {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Footer */
+        .footer {
+            background: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            padding: 32px 0;
+            margin-top: 106px;
+            text-align: center;
+            color: #64748b;
+            box-shadow: 
+                0 -4px 16px rgba(0, 0, 0, 0.04),
+                0 -2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 32px;
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 16px;
+                padding: 12px 20px;
+            }
+
+            .nav-menu {
+                gap: 16px;
+            }
+
+            .main-container {
+                margin: 24px auto;
+                padding: 0 20px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .upload-area {
+                padding: 48px 20px;
+            }
+
+            .card-title {
+                font-size: 24px;
+            }
+
+            .logo-text h1 {
+                font-size: 18px;
+            }
+
+            .logo-text p {
+                font-size: 11px;
+            }
+
+            .connection-status {
+                top: 60px;
+                right: 10px;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Connection Status -->
+    <div id="connectionStatus" class="connection-status" style="display: none;"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-circle">AI</div>
+                <div class="logo-text">
+                    <h1>Scene Text OCR</h1>
+                    <p>AI Text Recognition in Natural Scenes</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <a href="#home">Home</a>
+                <a href="#features">Features</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Upload Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Upload Image</h2>
+            </div>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-text">Drag and drop your image here</div>
+                <div class="upload-subtext">or click to browse from your computer</div>
+                <button class="btn btn-primary" id="uploadBtn">
+                    Choose Image
+                </button>
+            </div>
+
+            <input type="file" id="fileInput" class="file-input" accept="image/*">
+
+            <div id="previewSection" style="display: none;">
+                <!-- <div class="file-info" id="fileInfo"></div> -->
+                <img id="imagePreview" class="image-preview" alt="Preview">
+                <button class="btn btn-success" id="processBtn">
+                    Process with Scene Text OCR
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">OCR Results</h2>
+            </div>
+
+            <div id="resultsContent">
+                <div class="results-placeholder">
+                    <h3>Ready to analyze</h3>
+                    <p>Upload an image and click "Process with Scene Text OCR" to see the detected text results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Scene Text OCR AI.</p>
+    </footer>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const previewSection = document.getElementById('previewSection');
+        const imagePreview = document.getElementById('imagePreview');
+        const processBtn = document.getElementById('processBtn');
+        const resultsContent = document.getElementById('resultsContent');
+        const fileInfo = document.getElementById('fileInfo');
+        const connectionStatus = document.getElementById('connectionStatus');
+
+        let selectedFile = null;
+        let originalImageData = null;
+
+        // API endpoint
+        const API_ENDPOINT = 'http://localhost:8000/ocr';
+
+        // Check API connection on page load
+        checkAPIConnection();
+
+        // Upload button click
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        // Click upload area to select file
+        uploadArea.addEventListener('click', (e) => {
+            // Only trigger if not clicking the button
+            if (e.target !== uploadBtn) {
+                fileInput.click();
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        // Check API connection
+        async function checkAPIConnection() {
+            try {
+                const response = await fetch(API_ENDPOINT.replace('/ocr', '/'), {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                showConnectionStatus(true);
+            } catch (error) {
+                showConnectionStatus(false);
+            }
+        }
+
+        function showConnectionStatus(isOnline) {
+            connectionStatus.style.display = 'block';
+            if (isOnline) {
+                connectionStatus.className = 'connection-status online';
+                connectionStatus.textContent = '🟢 API Connected';
+                setTimeout(() => {
+                    connectionStatus.style.display = 'none';
+                }, 3000);
+            } else {
+                connectionStatus.className = 'connection-status offline';
+                connectionStatus.textContent = '🔴 API Disconnected - Check if backend is running';
+            }
+        }
+
+        // Handle file selection
+        function handleFileSelect(file) {
+            if (!file.type.startsWith('image/')) {
+                showError('Please select a valid image file (JPG, PNG, GIF)!');
+                return;
+            }
+
+            // Check file size (max 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                showError('File size too large! Please select an image smaller than 10MB.');
+                return;
+            }
+
+            selectedFile = file;
+            
+            // Show file info
+          
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                originalImageData = e.target.result;
+                previewSection.style.display = 'block';
+                resetResults();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Process OCR
+        processBtn.addEventListener('click', async () => {
+            if (!selectedFile) {
+                showError('Please select an image first!');
+                return;
+            }
+
+            showLoading();
+            
+            try {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                const response = await fetch(API_ENDPOINT, {
+                    method: 'POST',
+                    body: formData,
+                    mode: 'cors'
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error('API endpoint not found. Make sure the backend server is running on http://localhost:8000');
+                    } else if (response.status === 500) {
+                        throw new Error('Internal server error. Check the backend logs for details.');
+                    } else {
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    }
+                }
+
+                const data = await response.json();
+                
+                if (data.results) {
+                    showResults(data.results);
+                } else {
+                    throw new Error('Invalid response format from server');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    showError('Cannot connect to the backend server. Please make sure:<br>1. Backend server is running on http://localhost:8000<br>2. CORS is properly configured<br>3. No firewall is blocking the connection');
+                } else {
+                    showError(`Error processing image: ${error.message}`);
+                }
+                
+                showConnectionStatus(false);
+            }
+        });
+
+        function showLoading() {
+            resultsContent.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Processing ...</div>
+                </div>
+            `;
+            processBtn.disabled = true;
+        }
+
+        function showResults(ocrResults) {
+            if (!ocrResults || ocrResults.length === 0) {
+                resultsContent.innerHTML = `
+                    <div class="error-message">
+                        No text detected in the image. Try with an image containing clearer text or better lighting.
+                    </div>
+                `;
+                processBtn.disabled = false;
+                return;
+            }
+
+            // Create image with overlays
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                // Draw bounding boxes
+                ocrResults.forEach((result, index) => {
+                    const { box } = result;
+                    
+                    // Draw rectangle
+                    ctx.strokeStyle = '#2196F3';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
+                    
+                    // Draw background for text
+                    ctx.fillStyle = 'rgba(33, 150, 243, 0.9)';
+                    ctx.fillRect(box.x1, box.y1 - 25, Math.max(30, (index + 1).toString().length * 15), 25);
+                    
+                    // Draw text
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 16px -apple-system, BlinkMacSystemFont, sans-serif';
+                    ctx.fillText(`${index + 1}. ${result.text}`, box.x1 + 8, box.y1 - 6);
+                });
+
+                const processedImageUrl = canvas.toDataURL();
+                
+                // Generate detected texts list
+                const textsHtml = ocrResults.map((result, index) => `
+                    <div class="text-item">
+                        <strong>${index + 1}:</strong> "${result.text}"
+                        <div class="text-confidence">Confidence: ${(result.confidence * 100).toFixed(1)}% • Box: (${result.box.x1}, ${result.box.y1}) → (${result.box.x2}, ${result.box.y2})</div>
+                    </div>
+                `).join('');
+
+                resultsContent.innerHTML = `
+                    <div class="success-message">
+                        ✅ Successfully detected ${ocrResults.length} text region${ocrResults.length > 1 ? 's' : ''}!
+                    </div>
+                    <div style="text-align: center; margin: 32px 0;">
+                        <img src="${processedImageUrl}" class="result-image" alt="OCR Result">
+                    </div>
+                    <div class="detected-texts">
+                        <h4>Detected Text Regions</h4>
+                        ${textsHtml}
+                    </div>
+                `;
+            };
+            
+            img.src = originalImageData;
+            processBtn.disabled = false;
+        }
+
+        function showError(message) {
+            resultsContent.innerHTML = `
+                <div class="error-message">
+                    ❌ ${message}
+                </div>
+            `;
+            processBtn.disabled = false;
+        }
+
+        function resetResults() {
+            resultsContent.innerHTML = `
+                <div class="results-placeholder">
+                    <h3>Ready to process</h3>
+                    <p>Click "Process with Scene Text OCR" to analyze the uploaded image</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
