@@ -28,8 +28,8 @@ app.add_middleware(
 VOCAB_PATH = 'utils/vocab.yml'
 YOLO_CKPT = 'checkpoint/yolo.pt'
 OCR_CKPT = 'checkpoint/lstm.pt'
-# DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
-DEVICE= 'cpu'
+DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+# DEVICE= 'cpu'
 
 vocab = Vocab(VOCAB_PATH)
 vocab_size = len(vocab.char_2_idx)
