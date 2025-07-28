@@ -35,11 +35,22 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 - Detects text regions from input images.
 - Returns bounding boxes around each detected text instance.
 
+<p align="center">
+  <img src="demo/results-yolo.png" width="40%"><br>
+  <em>Figure: YOLOv11 detection training and validation</em>
+</p>
+
 ### 2. Text Recognition - BiLSTM
 - Cropped text regions are passed through a CNN-BiLSTM network.
 - The CNN uses **ResNet34** to extract features.
 - Features are fed into **Bidirectional LSTM** for sequence modeling.
 - Uses **CTC loss** for sequence alignment during training.
+
+<p align="center">
+  <img src="demo/train-rcnn.png" width="40%">
+  <img src="demo/val-rcnn.png" width="40%"><br>
+  <em>Figure: Training and validation loss curves for the text recognition model (RCNN).</em>
+</p>
 
 ---
 
@@ -48,3 +59,42 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 **Text detection** : https://drive.google.com/drive/folders/1bAHvRxJETifSWpKD-zlUEK_yNCUBLfgB?usp=sharing
 
 **Text Recognition** : https://drive.google.com/drive/folders/1513rGLn1sgr26BbP6QyJ4uMK1zLhJQbw?usp=sharing
+
+
+---
+
+## Quick Start
+
+### 1. Clone the repository
+
+```
+git clone https://github.com/tvtung2902/scene-text-ocr
+cd scene-text-ocr
+```
+
+### 2. Run
+
+#### a. Quick Test
+
+```
+python predict.py
+```
+
+#### b. Run the API and HTML interface
+
+```
+python app.py
+start client/index.html
+```
+
+## Contributing
+
+Feel free to open issues or pull requests if you'd like to improve this project or add new features.
+
+## License
+
+This project is open-source and available under the MIT License.
+
+---
+
+Thank you for checking out this project! If you find it useful, feel free to ⭐️ star the repository and share it with others.
