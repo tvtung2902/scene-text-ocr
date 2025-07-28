@@ -32,7 +32,7 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 <details>
   <summary>video demo</summary>
 
-  <video src="demo/demo.mp4" controls autoplay muted style="width:100%; max-width:720px; margin-top:10px;"></video>
+  <video src="demo/demo.MOV" controls autoplay muted style="width:100%; max-width:720px; margin-top:10px;"></video>
 
 </details>
 
