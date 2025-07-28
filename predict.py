@@ -95,5 +95,5 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         img_path = sys.argv[1]
     else:
-        img_path = 'image-3.png'
+        img_path = 'image4.png'
     main(img_path)
