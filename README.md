@@ -37,7 +37,7 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 ### 1. Pipeline
 
 <p align="center">
-  <img src="demo/pipeline.png" width="90%"><br>
+  <img src="demo/pipeline-img.png" width="90%"><br>
   <em>Figure: Pipeline training and inference</em>
 </p>
 
