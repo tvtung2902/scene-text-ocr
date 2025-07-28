@@ -67,7 +67,6 @@ Scene text recognition is a challenging task due to complex backgrounds, varying
 
 **Text Recognition** : https://drive.google.com/drive/folders/1513rGLn1sgr26BbP6QyJ4uMK1zLhJQbw?usp=sharing
 
-
 ---
 
 ## Quick Start
@@ -93,6 +92,8 @@ python predict.py
 python app.py
 start client/index.html
 ```
+
+---
 
 ## Contributing
 
